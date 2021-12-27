@@ -2,6 +2,11 @@ class HitAndBlow {
     private readonly answerSource = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     private answer: string[] = []
     private tryCount = 0
+    private mode: 'normal' | 'hard'
+
+    constructor(mode: 'normal' | 'hard') {
+        this.mode = mode
+    }
 
     async play() {
         const inputArr = (await promptInput("「,」区切りで3つの数字を入力してください")).split(',')
@@ -73,7 +78,7 @@ const promptInput = async (text: string) => {
 }
 
 (async () => {
-    const hitAndBlow = new HitAndBlow()
+    const hitAndBlow = new HitAndBlow('normal')
     hitAndBlow.setting()
     await hitAndBlow.play()
     hitAndBlow.end()
