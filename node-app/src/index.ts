@@ -6,19 +6,25 @@ type GameStore = {
     'janken': Janken
 }
 
+const gameTitles = ['hit and blow', 'janken'] as const
+type GameTitle = typeof gameTitles[number]
+
 class GameProcedure {
-    private currentGameTitle = "hit and blow"
-    private currentGame = new HitAndBlow()
+    private currentGameTitle: GameTitle | '' = ''
+    private currentGame: HitAndBlow | Janken | null = null
 
-    constructor(private readonly gameStore: GameStore) {
-
-    }
+    constructor(private readonly gameStore: GameStore) {}
 
     public async start() {
+        await this.select()
         await this.play()
     }
 
     private async play() {
+        if (!this.currentGame) {
+            throw new Error('ゲームが選択されていません')
+        }
+
         printLine(`===\n${this.currentGameTitle}を開始します。\n==`)
         await this.currentGame.setting()
         await this.currentGame.play()
@@ -40,6 +46,11 @@ class GameProcedure {
     private end() {
         printLine("ゲームを終了しました。")
         process.exit()
+    }
+
+    private async select() {
+        this.currentGameTitle = await promptSelect("ゲームのタイトルを入力してください", gameTitles)
+        this.currentGame = this.gameStore[this.currentGameTitle]
     }
 }
 
@@ -165,14 +176,6 @@ const promptSelect = async <T extends string>(text: string, values: readonly T[]
     }
 }
 
-(async () => {
-    new GameProcedure({
-        'hit and blow': new HitAndBlow(),
-        'janken': new Janken()
-    }).start()
-})()
-
-
 // https://github.com/awesome-typescript-book/code-snapshot/blob/main/03_node-app/013/05_ゲームの選択機能の実装2/src/index.ts
 
 const jankenOptions = ['rock', 'paper', 'scissors'] as const
@@ -255,3 +258,10 @@ class Janken {
     }
   }
 }
+
+(async () => {
+    new GameProcedure({
+        'hit and blow': new HitAndBlow(),
+        'janken': new Janken(),
+    }).start()
+})()
