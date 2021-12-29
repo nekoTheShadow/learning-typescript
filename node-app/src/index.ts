@@ -1,3 +1,26 @@
+class GameProcedure {
+    private currentGameTitle = "hit and blow"
+    private currentGame = new HitAndBlow()
+
+    public async start() {
+        await this.play()
+    }
+
+    private async play() {
+        printLine(`===\n${this.currentGameTitle}を開始します。\n==`)
+        await this.currentGame.setting()
+        await this.currentGame.play()
+        this.currentGame.end()
+        this.end()
+    }
+
+    private end() {
+        printLine("ゲームを終了しました。")
+        process.exit()
+    }
+}
+
+
 const modes = ['normal', 'hard']
 type Mode = typeof modes[number]
 
@@ -58,7 +81,6 @@ class HitAndBlow {
 
     end() {
         printLine(`正解です!\n試行回数: ${this.tryCount}回`)
-        process.exit()
     }
 
     private validate(inputArr: string[]) {
@@ -115,8 +137,5 @@ const promptSelect = async <T extends string>(text: string, values: readonly T[]
 }
 
 (async () => {
-    const hitAndBlow = new HitAndBlow()
-    await hitAndBlow.setting()
-    await hitAndBlow.play()
-    hitAndBlow.end()
+    new GameProcedure().start()
 })()
