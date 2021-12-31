@@ -1,7 +1,11 @@
 import {Task} from './task'
 
 export class TaskRender {
-    constructor(private readonly todoList: HTMLElement){}
+    constructor(
+        private readonly todoList: HTMLElement,
+        private readonly doingList: HTMLElement,
+        private readonly doneList: HTMLElement
+    ){}
 
     append(task: Task) {
         const {taskEL, deleteButtonEL} = this.render(task)
