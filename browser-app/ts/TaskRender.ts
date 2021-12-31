@@ -4,8 +4,15 @@ export class TaskRender {
     constructor(private readonly todoList: HTMLElement){}
 
     append(task: Task) {
-        const taskEL = this.render(task)
-        this.todoList.append(taskEL) 
+        const {taskEL, deleteButtonEL} = this.render(task)
+        this.todoList.append(taskEL)
+        return {deleteButtonEL}
+    }
+
+    remove(task: Task) {
+        const taskEL = document.getElementById(task.id)
+        if (!taskEL) return
+        this.todoList.removeChild(taskEL)
     }
 
     private render(task: Task) {
@@ -20,6 +27,6 @@ export class TaskRender {
 
         taskEL.append(spanEL, deleteButtonEL)
 
-        return taskEL
+        return {taskEL, deleteButtonEL}
     }
 }
