@@ -1,5 +1,5 @@
 import {EventListener} from './EventListener'
-import {Task} from './task'
+import {Task, Status} from './task'
 import {TaskCollection} from './TaskCollection'
 import {TaskRender} from './TaskRender'
 
@@ -15,6 +15,7 @@ class Application {
     start() {
         const createForm = document.getElementById('createForm') as HTMLElement
         this.eventListener.add('submit-handler', 'submit', createForm, this.handleSubmit)
+        this.taskRender.subscribeDragAndDrop(this.handleDragAndDrop)
     }
 
     private handleSubmit = (e: Event) => {
@@ -35,6 +36,17 @@ class Application {
         if (!window.confirm(`「${task.title}」を削除してよろしいですか?`)) return;
         this.eventListener.remove(task.id)
         this.taskRender.remove(task)
+    }
+
+    private handleDragAndDrop = (el: Element, sibling: Element | null, newStatus: Status) => {
+        const taskId = this.taskRender.getId(el)
+        if (!taskId) return
+        
+        const task = this.taskCollection.find(taskId)
+        if (!task) return
+        task.update({status: newStatus})
+        this.taskCollection.update(task)
+        console.log(sibling)
     }
 }
 
