@@ -1,5 +1,6 @@
 import dragula from 'dragula'
 import {Task, Status, statusMap} from './task'
+import { TaskCollection } from './TaskCollection'
 
 export class TaskRender {
     constructor(
@@ -49,5 +50,23 @@ export class TaskRender {
         taskEL.append(spanEL, deleteButtonEL)
 
         return {taskEL, deleteButtonEL}
+    }
+
+    renderAll(taskCollection: TaskCollection) {
+        const todoTasks = this.renderList(taskCollection.filter(statusMap.todo), this.todoList)
+        const doingTasks = this.renderList(taskCollection.filter(statusMap.doing), this.doingList)
+        const doneTasks = this.renderList(taskCollection.filter(statusMap.done), this.doneList)
+        return [...todoTasks, ...doingTasks, ...doneTasks]
+    }
+
+    private renderList(tasks: Task[], listEL: HTMLElement) {
+        if (tasks.length === 0) return []
+        const taskList: Array<{task: Task, deleteButtonEL: HTMLButtonElement}> = []
+        tasks.forEach((task) => {
+            const {taskEL, deleteButtonEL} = this.render(task)
+            listEL.append(taskEL)
+            taskList.push({task, deleteButtonEL})
+        })
+        return taskList
     }
 }
