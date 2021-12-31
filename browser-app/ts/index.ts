@@ -1,13 +1,22 @@
 import {EventListener} from './EventListener'
+import {Task} from './task'
 
 class Application {
-    start() {
-        const eventListener = new EventListener()
-        const button = document.getElementById('deleteAllDoneTask')
-        if (!button) return;
+    private readonly eventListener = new EventListener()
 
-        eventListener.add('sample', 'click', button, () => alert('click'))
-        eventListener.remove('sample')
+    start() {
+        const createForm = document.getElementById('createForm') as HTMLElement
+        this.eventListener.add('submit-handler', 'submit', createForm, this.handleSubmit)
+    }
+
+    private handleSubmit = (e: Event) => {
+        e.preventDefault()
+        
+        const titleInput = document.getElementById('title') as HTMLInputElement
+        if (!titleInput) return
+
+        const task = new Task({title: titleInput.value})
+        console.log(task)
     }
 }
 
