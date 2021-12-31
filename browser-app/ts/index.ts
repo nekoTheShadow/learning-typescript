@@ -1,3 +1,14 @@
-import {sum} from './sum'
+class Application {
+    start() {
 
-console.log(sum(1, 2))
+        const button = document.getElementById('deleteAllDoneTask')
+        if (!button) return;
+
+        console.log(button)
+    }
+}
+
+window.addEventListener('load', () => {
+    const app = new Application()
+    app.start()
+})
