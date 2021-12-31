@@ -44,12 +44,26 @@ export class TaskCollection {
         if (!jsonString) return []
 
         try {
-            const storedTasks: any[] = JSON.parse(jsonString)
+            const storedTasks = JSON.parse(jsonString)
+            assertIsTaskObject(storedTasks)
             const tasks = storedTasks.map((task) => new Task(task))
+            console.log(tasks)
             return tasks 
         } catch {
             this.storage.removeItem(STORAGE_KEY)
             return []
         }
+    }
+}
+
+export type TaskObject = {
+    id: string,
+    title: string,
+    status: Status
+}
+
+function assertIsTaskObject(value: any): asserts value is TaskObject[] {
+    if (!Array.isArray(value) || !value.every((item) => Task.validate(item))) {
+        throw new Error("引数valueはTaskObject型に一致しません")
     }
 }
