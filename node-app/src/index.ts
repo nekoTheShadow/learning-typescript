@@ -2,8 +2,7 @@ const nextActions = ['play again', 'exit', 'change game'] as const
 type NextAction = typeof nextActions[number]
 
 type GameStore = {
-    'hit and blow': HitAndBlow,
-    'janken': Janken
+    [key in GameTitle]: HitAndBlow | Janken
 }
 
 const gameTitles = ['hit and blow', 'janken'] as const
