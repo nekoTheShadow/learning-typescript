@@ -13,4 +13,12 @@ export class EventListener {
         this.listeners[listenerId] = {event, element, handler}
         element.addEventListener(event, handler)
     } 
+
+    remove(listenerId: string) {
+        const listener = this.listeners[listenerId]
+        if (!listener) return;
+
+        listener.element.removeEventListener(listener.event, listener.handler)
+        delete this.listeners[listenerId]
+    }
 }
