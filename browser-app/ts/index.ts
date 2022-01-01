@@ -22,7 +22,8 @@ class Application {
         })
 
         this.eventListener.add('submit', createForm, this.handleSubmit)
-        this.eventListener.add('click', deleteAllDoneTaskButton, this.handleClickDeleteAllDoneTasks)
+        // this.eventListener.add('click', deleteAllDoneTaskButton, this.handleClickDeleteAllDoneTasks)
+        this.eventListener.add('click', deleteAllDoneTaskButton, (_e) => this.handleClickDeleteAllDoneTasks())
         this.taskRender.subscribeDragAndDrop(this.handleDragAndDrop)
     }
 
